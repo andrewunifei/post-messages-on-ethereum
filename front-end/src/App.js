@@ -137,26 +137,44 @@ export default function App() {
                 <div className="bio">
                     Estou aprendendo sobre blockchain e smart contracts.
                 </div>
+
+                <textarea placeholder="Deixe uma mensagem!" rows="4" ></textarea>
         
-                <button className="waveButton" onClick={wave}>
+                <button id="wave" className="waveButton" onClick={wave}>
                     Acenar
                 </button>
         
                 {/* só mostra o botão se não existir nenhuma conta conectada */}
                 {!currentAccount &&
                     (
-                      <button className="waveButton" onClick={connectWallet}>
-                        Connect Wallet
+                      <button className="waveButton" id="conectar" onClick={connectWallet}>
+                        Conectar MetaMask
                       </button>
+                    )
+                }
+
+                {!currentAccount &&
+                    (
+                      <div className="bio">
+                        Para ver as mensagens enviadas pelas pessoas, conecte-se com uma carteira!
+                      </div>
                     )
                 }
 
                  {allWaves.map((wave, index) => {
                     return (
-                        <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
-                            <div>Address: {wave.address}</div>
-                            <div>Time: {wave.timestamp.toString()}</div>
-                            <div>Message: {wave.message}</div>
+                        <div key={index} 
+                          style={{
+                            backgroundColor: "lightblue",
+                            marginTop: "1em",
+                            marginBottom: "1em",
+                            padding: "1em",
+                            borderRadius: "0.4em"
+                          }}
+                        >
+                            <p><span className="content">Endereço: </span>{wave.address}</p>
+                            <p><span className="content">Data: </span>{wave.timestamp.toString()}</p>
+                            <p><span className="content">Mensagem: </span>{wave.message}</p>
                         </div>)
                     })}
             </div>

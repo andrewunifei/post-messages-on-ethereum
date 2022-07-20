@@ -25,10 +25,33 @@
 }
 
 .waveButton {
+  font-size: 1em;
   cursor: pointer;
   margin-top: 16px;
   padding: 8px;
   border: 0;
   border-radius: 5px;
-  
+}
+
+#wave:hover{
+  background-color: #e2e2e2;
+}
+
+#conectar{
+  background-color: #f88f33;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+}
+
+#conectar:hover{
+  background-color: #e67b1e;
+}
+
+textarea {
+  margin-top: 1em;
+  resize: none;
+}
+
+.content{
+  font-weight: bold;
 }
