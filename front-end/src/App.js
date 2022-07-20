@@ -5,11 +5,16 @@ import obj from './utils/WavePortal.json'
 
 export default function App() {
     // Para interagir com o contrato
-    const contractAddress = "0xFb2822FdC63D8ca80096Cf9632AaE32fA6eDC5E1";
+    const contractAddress = "0x9113EDB77E599629dA7b549F915900134C2d410D";
     const contractABI = obj.abi;
 
     const [currentAccount, setCurrentAccount] = useState("");
-    const [allWaves, setAllWaves] = useState([])
+    const [allWaves, setAllWaves] = useState([]);
+    const [message, setMessage] = useState("")
+
+    const handleMessage = e => {
+        setMessage(e.target.value)
+    }
     
     // Checa se o browser tem metamask
     const checkWallet = async () => {
@@ -79,7 +84,7 @@ export default function App() {
                 let count = await wavePortalContract.getTotalWaves();
                 console.log("Total de acenos... ", count.toNumber());
 
-                const waveTxn = await wavePortalContract.wave("Olá! Mensagem temporária!!");
+                const waveTxn = await wavePortalContract.wave(message);
                 console.log("Minerando... ", waveTxn.hash);
 
                 waveTxn.wait();
@@ -138,7 +143,12 @@ export default function App() {
                     Estou aprendendo sobre blockchain e smart contracts.
                 </div>
 
-                <textarea placeholder="Deixe uma mensagem!" rows="4" ></textarea>
+                <textarea
+                    placeholder="Deixe uma mensagem!"
+                    rows="4"
+                    value={message}
+                    onChange={handleMessage}>
+                </textarea>
         
                 <button id="wave" className="waveButton" onClick={wave}>
                     Acenar

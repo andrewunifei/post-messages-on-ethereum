@@ -18,13 +18,14 @@ contract WavePortal{
 
     Wave[] waves;
 
-    constructor(){
+    constructor() payable {
         console.log("Oi mundo!");
     }
 
     function wave(string memory _message) public{
         totalWaves += 1;
         console.log ('%s acenou com a mensagem %s', msg.sender, _message);
+        console.log("Balanco do usuario depois", msg.sender.balance);
 
         waves.push(Wave(
             msg.sender,
@@ -33,6 +34,14 @@ contract WavePortal{
         ));
 
         emit NewWave(msg.sender, block.timestamp, _message);
+
+        uint256 prize = 0.0001 ether;
+
+        require(prize <= address(this).balance, "Impossivel. Quantidade insuficiente.");
+
+        (bool success,) = (msg.sender).call{value: prize}(""); // Envia o valor para o endereço
+
+        require(success, "Erro na passagem do premio");
     }
 
     function getAllWaves() public view returns (Wave[] memory){

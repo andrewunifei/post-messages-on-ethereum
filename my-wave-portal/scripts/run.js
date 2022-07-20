@@ -1,29 +1,45 @@
+// Código apra testar localmente antes de implementar na testnet rinkeby
+
 const main = async () => {
     const [owner, randomPerson] = await hre.ethers.getSigners();
     const waveContractFactory = await hre.ethers.getContractFactory("WavePortal"); // Compilação
-    const waveContract = await waveContractFactory.deploy(); // iImplementa em uma blockchain local
+    const waveContract = await waveContractFactory.deploy({
+        // Implementa o contrato com fundo de 0.1, removido da carteira que implementou
+        value: hre.ethers.utils.parseEther("0.1"), 
+    }); // iImplementa em uma blockchain local
     await waveContract.deployed(); // Checa se está disponível na blockchain
     console.log("Contract deployed to: ", waveContract.address);
-    console.log("Contract deployed by: ", owner.address)
+    console.log("Contract deployed by: ", owner.address);
 
-    let waveCount;
-    waveCount = await waveContract.getTotalWaves();
+    //console.log(owner)
 
-    let waveTxn = await waveContract.wave("Olá! Uma mensagem!");
+    let contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+    let ownerBalance = await hre.ethers.provider.getBalance(owner.address);
 
-    // Espera a "mineração" da função. Em outras palavras, a confimação de bloco.
-    // Como uma variável de estado é alterada, é necessário esperar a confirmação de bloco
+    console.log(
+        "Balanço do contrato antes:",
+        hre.ethers.utils.formatEther(contractBalance)
+    );
+
+    console.log(
+        "Balanço do usuário antes:",
+        hre.ethers.utils.formatEther(ownerBalance)
+    );
+
+    let waveTxn = await waveContract.wave("A message");
     await waveTxn.wait();
 
-    // Aqui não é necessário esperar porque estamos apenas consultando a blockchain
-    waveCount = await waveContract.getTotalWaves();
+    contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
 
-    waveTxn = await waveContract.connect(randomPerson).wave("Outra mensagem!");
-    await waveTxn.wait();
+    // Balanço depois da transação
+    console.log(
+        "Balanço do contrato depois:",
+        hre.ethers.utils.formatEther(contractBalance)
+    );
 
-    waveCount = await waveContract.getTotalWaves();
+    let allWaves = await waveContract.getAllWaves();
+    console.log(allWaves)
 
-    console.log(await waveContract.getAllWaves());
 }
 
 const runMain = async () => {

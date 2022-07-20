@@ -6,7 +6,12 @@ const main = async () => {
     console.log("Account balance: ", accountBalance.toString())
 
     const waveContractFactory = await hre.ethers.getContractFactory("WavePortal") // Compilação
-    const waveContract = await waveContractFactory.deploy() // Implementação na blockchain
+    const waveContract = await waveContractFactory.deploy({
+      // Adicionando fundos ao contrato
+      value: hre.ethers.utils.parseEther("0.001"),
+    });
+
+    // Implementação na blockchain
     await waveContract.deployed() // Espera confirmação de bloco
 
     console.log("WavePortal address: ", waveContract.address);
