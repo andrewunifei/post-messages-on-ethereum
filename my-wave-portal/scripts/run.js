@@ -9,19 +9,21 @@ const main = async () => {
     let waveCount;
     waveCount = await waveContract.getTotalWaves();
 
-    let waveTxn = await waveContract.wave();
+    let waveTxn = await waveContract.wave("Olá! Uma mensagem!");
 
-    // Espera a "mineração" da função. Em outras palavras, a confimação de bloco
-    // como uma variável de estado é alterada, é necessário esperar a confirmação de bloco
+    // Espera a "mineração" da função. Em outras palavras, a confimação de bloco.
+    // Como uma variável de estado é alterada, é necessário esperar a confirmação de bloco
     await waveTxn.wait();
 
     // Aqui não é necessário esperar porque estamos apenas consultando a blockchain
     waveCount = await waveContract.getTotalWaves();
 
-    waveTxn = await waveContract.connect(randomPerson).wave();
+    waveTxn = await waveContract.connect(randomPerson).wave("Outra mensagem!");
     await waveTxn.wait();
 
     waveCount = await waveContract.getTotalWaves();
+
+    console.log(await waveContract.getAllWaves());
 }
 
 const runMain = async () => {
